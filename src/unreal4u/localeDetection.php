@@ -39,13 +39,8 @@ class localeDetection {
     public $geoliteCountryDBLocation = '';
 
     /**
-     * The database connection
-     * @var unreal4u\dbmysqli
-     */
-    protected $_dbConnection = null;
-
-    /**
      * Constructor
+     *
      * @param array $validLocales A list of accepted locales
      */
     public function __construct($validLocales=array()) {
@@ -151,18 +146,14 @@ class localeDetection {
         $this->locale = '';
 
         if (!empty($this->geoliteCountryDBLocation)) {
-            try {
-                $reader = new \GeoIp2\Database\Reader($this->geoliteCountryDBLocation);
-                $record = $reader->country($this->_getIpFromClient());
-                $primaryLanguage = \Locale::getPrimaryLanguage($record->country->isoCode);
-                if (!empty($primaryLanguage)) {
-                    $locale = $primaryLanguage.'_'.$record->country->isoCode;
-                    if ($this->_checkLocale($locale)) {
-                        $this->locale = $locale;
-                    }
+            $reader = new \GeoIp2\Database\Reader($this->geoliteCountryDBLocation);
+            $record = $reader->country($this->_getIpFromClient());
+            $primaryLanguage = \Locale::getPrimaryLanguage($record->country->isoCode);
+            if (!empty($primaryLanguage)) {
+                $locale = $primaryLanguage.'_'.$record->country->isoCode;
+                if ($this->_checkLocale($locale)) {
+                    $this->locale = $locale;
                 }
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
             }
         }
 
