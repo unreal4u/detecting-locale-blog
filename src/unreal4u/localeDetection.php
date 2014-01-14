@@ -65,6 +65,7 @@ class localeDetection {
 
     /**
      * Gets the real ip from the user
+     *
      * @return string
      */
     protected function _getIpFromClient() {
@@ -105,6 +106,8 @@ class localeDetection {
 
     /**
      * Tries to find out from a GET variable which locale we should load
+     *
+     * @return string
      */
     public function getLocaleFromGetRequest() {
         $this->locale = '';
@@ -118,6 +121,8 @@ class localeDetection {
 
     /**
      * Tries to find out from the headers which is the prefered locale
+     *
+     * @return string
      */
     public function getLocaleFromHeaders() {
         $this->locale = '';
@@ -138,11 +143,10 @@ class localeDetection {
      * "GeoLite2 Country" one
      *
      * @link http://dev.maxmind.com/geoip/geoip2/geolite2/
-     * @param string $dbLocation The location to the mmdb formatted database
      * @throws \Exception Can throw any kind of MaxMind's exception
      * @return string
      */
-    public function getLocaleFromIP($dbLocation='') {
+    public function getLocaleFromIP() {
         $this->locale = '';
 
         if (!empty($this->geoliteCountryDBLocation)) {
