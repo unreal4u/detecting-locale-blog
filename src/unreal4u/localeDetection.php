@@ -2,6 +2,8 @@
 
 namespace unreal4u;
 
+use GeoIp2\Database\Reader;
+
 /**
  * Is able to detect through various methods which locale we must load
  *
@@ -33,7 +35,7 @@ class localeDetection {
      * Constructor
      * @param array $validLocales A list of accepted locales
      */
-    public function __construct($validLocales) {
+    public function __construct($validLocales=array()) {
         if (is_array($validLocales) && !empty($validLocales)) {
             $this->validLocales = $validLocales;
         }
@@ -53,6 +55,10 @@ class localeDetection {
         return '';
     }
 
+    /**
+     * Gets the real ip from the user
+     * @return string
+     */
     protected function _getIpFromClient() {
         $ip = '127.0.0.1';
         if (PHP_SAPI != 'cli') {
@@ -66,6 +72,24 @@ class localeDetection {
         }
 
         return $ip;
+    }
+
+    /**
+     * Tries all methods in order
+     *
+     * @return string
+     */
+    public function getLocaleFromClient() {
+        $this->locale = $this->getLocaleFromGetRequest();
+        if (empty($this->locale)) {
+            $this->locale = $this->getLocaleFromHeaders();
+            if (empty($this->locale)) {
+                // @TODO set db credentials
+                $this->locale = $this->getLocaleFromIP();
+            }
+        }
+
+        return $this->locale;
     }
 
     /**
@@ -91,12 +115,16 @@ class localeDetection {
         return $this->locale;
     }
 
-    public function getLocaleFromIP($dbName='', $dbHost='', $dbUser='', $dbPass='', $dbPort=3306) {
-        $ip = $this->_getIpFromClient();
+    public function getLocaleFromIP($dbLocation) {
+        $reader = new Reader($dbLocation);
+        try {
+            $record = $reader->country($this->_getIpFromClient());
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+        }
 
-        $this->_dbConnection = new unreal4u\dbmysqli();
-        $this->_dbConnection->registerConnection($dbName, $dbHost, $dbUser, $dbPass, $dbPort);
-        $result = $this->_dbConnection->query('SELECT VERSION()');
-        var_dump($result);
+        #print($record->country->isoCode . "\n"); // 'US'
+        #print($record->country->name . "\n"); // 'United States'
+        #print($record->country->names['zh-CN'] . "\n"); // '美国'
     }
 }
