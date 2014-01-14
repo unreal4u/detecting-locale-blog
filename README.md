@@ -26,8 +26,8 @@ Installation
 --------
 
 * Execute composer with <code>composer.phar install</code> or <code>composer.phar update</code>
-** This should install all dependencies
-** If you don't know how to use composer or what it is, visit their [official homepage](http://getcomposer.org/).
+    * This should install all dependencies
+    * If you don't know how to use composer or what it is, visit their [official homepage](http://getcomposer.org/).
 * Download Maxmind's GeoLite2 Country database from [their website](http://dev.maxmind.com/geoip/geoip2/geolite2/).
 * Use the code:
 <pre>include('src/unreal4u/localeDetection.php');
@@ -40,8 +40,8 @@ Instalación
 --------
 
 * Ejecuta composer con <code>composer.phar install</code> or <code>composer.phar update</code>
-** Esto debería instalar todas las dependencias.
-** Si no sabes cómo usar composer o qué es, visita su [página oficial](http://getcomposer.org/).
+    * Esto debería instalar todas las dependencias.
+    * Si no sabes cómo usar composer o qué es, visita su [página oficial](http://getcomposer.org/).
 * Baja la base de datos "GeoLite2 Country" desde la [página de Maxmind](http://dev.maxmind.com/geoip/geoip2/geolite2/).
 * Usa el código:
 <pre>include('src/unreal4u/localeDetection.php');
